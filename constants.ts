@@ -284,7 +284,7 @@ export const SCORING_DIMENSIONS: ScoreDimension[] = [
   },
   { 
     id: 'engineering_judgment', 
-    label: 'Engineering', 
+    label: 'Eng. Judgment', 
     letter: 'E',
     description: 'Did you think like a senior?',
     color: 'text-purple-400', 

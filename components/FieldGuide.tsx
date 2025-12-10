@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { X, BookOpen } from 'lucide-react';
+import { X, BookOpen, Type, Image, Mic } from 'lucide-react';
 
 interface Props {
   isOpen: boolean;
@@ -80,15 +81,21 @@ export const FieldGuide: React.FC<Props> = ({ isOpen, onClose }) => {
              <h3 className="text-lg font-bold text-white font-sans tracking-tight border-b border-white/10 pb-2">Challenge Types</h3>
              <div className="grid grid-cols-3 gap-4">
                 <div className="bg-white/5 p-3 rounded-lg border border-white/5">
-                   <div className="text-xs font-bold text-white uppercase mb-1">Text</div>
+                   <div className="text-xs font-bold text-white uppercase mb-1 flex items-center gap-2">
+                     <Type className="w-3 h-3 text-white/70" /> Text
+                   </div>
                    <div className="text-xs text-white/50">Type your prompt.</div>
                 </div>
                 <div className="bg-white/5 p-3 rounded-lg border border-white/5">
-                   <div className="text-xs font-bold text-white uppercase mb-1">Image</div>
+                   <div className="text-xs font-bold text-white uppercase mb-1 flex items-center gap-2">
+                     <Image className="w-3 h-3 text-white/70" /> Image
+                   </div>
                    <div className="text-xs text-white/50">Interpret visual intel.</div>
                 </div>
                 <div className="bg-white/5 p-3 rounded-lg border border-white/5">
-                   <div className="text-xs font-bold text-white uppercase mb-1">Voice</div>
+                   <div className="text-xs font-bold text-white uppercase mb-1 flex items-center gap-2">
+                     <Mic className="w-3 h-3 text-white/70" /> Voice
+                   </div>
                    <div className="text-xs text-white/50">Speak your prompt.</div>
                 </div>
              </div>

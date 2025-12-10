@@ -1,5 +1,6 @@
+
 import React, { useEffect, useState } from 'react';
-import { Target, TrendingUp, Loader2 } from 'lucide-react';
+import { Target, TrendingUp, Loader2, AlertCircle } from 'lucide-react';
 
 interface Props {
   percentile: number;
@@ -61,6 +62,12 @@ export const PercentileGauge: React.FC<Props> = ({ percentile }) => {
         text: 'text-indigo-400',
         bg: 'bg-indigo-500/10'
     };
+    if (val <= 0) return {
+        bar: 'bg-zinc-700',
+        shadow: 'shadow-none',
+        text: 'text-zinc-500',
+        bg: 'bg-zinc-500/10'
+    };
     return {
         bar: 'bg-amber-500', 
         shadow: 'shadow-[0_0_20px_rgba(245,158,11,0.4)]',
@@ -104,7 +111,7 @@ export const PercentileGauge: React.FC<Props> = ({ percentile }) => {
             className={`h-full rounded-full transition-all duration-75 ease-out relative ${status === 'calculating' ? 'w-full bg-white/5 animate-pulse' : `${theme.bar} ${theme.shadow}`}`}
             style={status === 'calculating' ? {} : { width: `${widthPercentage}%` }}
           >
-             {status !== 'calculating' && (
+             {status !== 'calculating' && roundedValue > 0 && (
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-1/2 -skew-x-12 translate-x-[-200%] animate-[shimmer_2s_infinite_linear]" />
              )}
           </div>
@@ -117,8 +124,22 @@ export const PercentileGauge: React.FC<Props> = ({ percentile }) => {
           </div>
           {status === 'done' && (
              <div className={`text-[10px] font-mono uppercase tracking-widest font-bold flex items-center gap-1.5 animate-in fade-in slide-in-from-bottom-1 ${theme.text}`}>
-                <TrendingUp className="w-3 h-3" />
-                Top {100 - roundedValue}% of operators
+                {roundedValue === 0 ? (
+                    <>
+                        <AlertCircle className="w-3 h-3" />
+                        BELOW BASELINE
+                    </>
+                ) : roundedValue < 20 ? (
+                    <>
+                        <TrendingUp className="w-3 h-3 rotate-180" />
+                        BOTTOM {roundedValue}% OF OPERATORS
+                    </>
+                ) : (
+                    <>
+                        <TrendingUp className="w-3 h-3" />
+                        TOP {100 - roundedValue}% OF OPERATORS
+                    </>
+                )}
              </div>
           )}
        </div>
