@@ -1,0 +1,7 @@
+{
+  "name": "VibeBench One Shot",
+  "description": "Enterprise UX pivot",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
