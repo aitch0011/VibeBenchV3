@@ -1,6 +1,6 @@
 {
-  "name": "VibeBench One Shot",
-  "description": "Enterprise UX pivot",
+  "name": "VibeBench",
+  "description": "LeetCode is dead! Longlive VibeBench.",
   "requestFramePermissions": [
     "microphone"
   ]
