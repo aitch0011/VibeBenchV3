@@ -8,13 +8,12 @@ import { PROBLEMS } from '../constants';
 interface Props {
   onEnterArena: () => void;
   onSelectChallenge: (problemId: string) => void;
-  onPlayIntro?: () => void;
   leaderboard: LeaderboardEntry[];
   userRank?: number;
   userPercentile?: number;
 }
 
-export const DomainSelector: React.FC<Props> = ({ onEnterArena, onSelectChallenge, onPlayIntro, leaderboard, userRank }) => {
+export const DomainSelector: React.FC<Props> = ({ onEnterArena, onSelectChallenge, leaderboard, userRank }) => {
   
   const frontendChallenges = PROBLEMS.filter(p => p.domain === 'Frontend');
   const backendChallenges = PROBLEMS.filter(p => p.domain === 'Backend');
@@ -143,18 +142,9 @@ export const DomainSelector: React.FC<Props> = ({ onEnterArena, onSelectChalleng
                     <span className="relative z-10">Enter Arena</span>
                     <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
                  </button>
-                 {onPlayIntro && (
-                    <button 
-                      onClick={onPlayIntro}
-                      className="group px-6 py-4 bg-white border border-zinc-200 text-zinc-900 rounded-full font-bold text-lg tracking-tight hover:bg-zinc-50 hover:border-zinc-300 transition-all flex items-center gap-2"
-                    >
-                       <PlayCircle className="w-5 h-5 group-hover:text-teal-600 transition-colors" />
-                       <span className="hidden sm:inline">Prologue</span>
-                    </button>
-                 )}
                </div>
                <p className="mt-4 text-xs font-mono text-zinc-400">
-                  NO SIGN-UP REQUIRED • FREE TO PLAY
+                  NO SIGN-UP REQUIRED • FREE TO COMPETE
                </p>
             </div>
          </div>

@@ -45,7 +45,7 @@ export const ArenaHeader: React.FC = () => {
                  CEPE Scoring
               </div>
               <p className="text-xs text-white/50 leading-relaxed">
-                 Judged on Completeness, Efficiency (Turbo), Precision, and Engineering (Maverick).
+                 Judged on Completeness, Efficiency, Precision, and Engineering Judgment.
               </p>
            </div>
 
