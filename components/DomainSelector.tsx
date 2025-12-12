@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Layout, Server, ArrowRight, Zap, Target, Brain, CheckCircle2, Code2, Mic, MousePointer2, Activity, Lock, Image, Type, BookOpen, Terminal, Users, TrendingUp, Github } from 'lucide-react';
+import { Layout, Server, ArrowRight, Zap, Target, Brain, CheckCircle2, Code2, Mic, MousePointer2, Activity, Lock, Image, Type, BookOpen, Terminal, Users, TrendingUp, Github, PlayCircle } from 'lucide-react';
 import { LeaderboardEntry, Problem } from '../types';
 import { Leaderboard } from './Leaderboard';
 import { PROBLEMS } from '../constants';
@@ -8,12 +8,13 @@ import { PROBLEMS } from '../constants';
 interface Props {
   onEnterArena: () => void;
   onSelectChallenge: (problemId: string) => void;
+  onPlayIntro?: () => void;
   leaderboard: LeaderboardEntry[];
   userRank?: number;
   userPercentile?: number;
 }
 
-export const DomainSelector: React.FC<Props> = ({ onEnterArena, onSelectChallenge, leaderboard, userRank }) => {
+export const DomainSelector: React.FC<Props> = ({ onEnterArena, onSelectChallenge, onPlayIntro, leaderboard, userRank }) => {
   
   const frontendChallenges = PROBLEMS.filter(p => p.domain === 'Frontend');
   const backendChallenges = PROBLEMS.filter(p => p.domain === 'Backend');
@@ -133,14 +134,25 @@ export const DomainSelector: React.FC<Props> = ({ onEnterArena, onSelectChalleng
                <br className="hidden md:block" />
                One prompt. One challenge. Prove you're not just getting lucky.
             </p>
-            <div className="pt-8 flex flex-col items-center animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
-               <button 
-                  onClick={onEnterArena}
-                  className="group relative px-10 py-4 bg-zinc-900 text-white rounded-full font-bold text-lg tracking-tight hover:scale-105 hover:bg-zinc-800 transition-all shadow-xl shadow-zinc-900/20 flex items-center gap-3 overflow-hidden"
-               >
-                  <span className="relative z-10">Enter Arena</span>
-                  <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
-               </button>
+            <div className="pt-8 flex flex-col items-center animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300 gap-4">
+               <div className="flex items-center gap-4">
+                 <button 
+                    onClick={onEnterArena}
+                    className="group relative px-10 py-4 bg-zinc-900 text-white rounded-full font-bold text-lg tracking-tight hover:scale-105 hover:bg-zinc-800 transition-all shadow-xl shadow-zinc-900/20 flex items-center gap-3 overflow-hidden"
+                 >
+                    <span className="relative z-10">Enter Arena</span>
+                    <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
+                 </button>
+                 {onPlayIntro && (
+                    <button 
+                      onClick={onPlayIntro}
+                      className="group px-6 py-4 bg-white border border-zinc-200 text-zinc-900 rounded-full font-bold text-lg tracking-tight hover:bg-zinc-50 hover:border-zinc-300 transition-all flex items-center gap-2"
+                    >
+                       <PlayCircle className="w-5 h-5 group-hover:text-teal-600 transition-colors" />
+                       <span className="hidden sm:inline">Prologue</span>
+                    </button>
+                 )}
+               </div>
                <p className="mt-4 text-xs font-mono text-zinc-400">
                   NO SIGN-UP REQUIRED • FREE TO PLAY
                </p>

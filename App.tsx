@@ -9,6 +9,7 @@ import { PercentileGauge } from './components/PercentileGauge';
 import { Share } from './components/Share';
 import { ArenaHeader } from './components/ArenaHeader';
 import { ChallengeGrid } from './components/ChallengeGrid';
+import { IntroSequence } from './components/IntroSequence';
 import { PROBLEMS, SCORING_DIMENSIONS } from './constants';
 import { EvaluationResult, GameState, LeaderboardEntry, Domain, Problem, Difficulty } from './types';
 import { generateCodeSolution, judgeSolution } from './services/geminiService';
@@ -16,6 +17,7 @@ import { initDB, saveScore, getLeaderboard } from './services/db';
 import { RotateCcw, Send, Sparkles, CheckCircle2, Trophy, Calculator, Lock, Timer, Info, Github, UserCircle2, ArrowLeft, Database, Eye, ImageOff, Layout as LayoutIcon, Server, ChevronRight, Mic, ArrowRight, ChevronDown, StopCircle } from 'lucide-react';
 
 export default function App() {
+  const [showIntro, setShowIntro] = useState(false);
   const [currentView, setCurrentView] = useState<'landing' | 'arena'>('landing');
   const [expandedDomain, setExpandedDomain] = useState<Domain | null>(null);
   const [selectedChallenge, setSelectedChallenge] = useState<Problem | null>(null);
@@ -356,6 +358,10 @@ export default function App() {
     );
   };
 
+  if (showIntro) {
+    return <IntroSequence onComplete={() => setShowIntro(false)} />;
+  }
+
   if (!dbReady) {
     return (
       <div className="min-h-screen bg-zinc-50 flex items-center justify-center text-zinc-400 font-mono gap-2">
@@ -379,6 +385,7 @@ export default function App() {
         <DomainSelector 
           onEnterArena={handleEnterArena} 
           onSelectChallenge={handleLandingChallengeSelect}
+          onPlayIntro={() => setShowIntro(true)}
           leaderboard={leaderboard} 
           userRank={currentUserRank}
         />

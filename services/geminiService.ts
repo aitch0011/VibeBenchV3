@@ -55,19 +55,18 @@ export const generateCodeSolution = async (
   const ai = getAiClient();
   
   const systemPrompt = `
-    You are a competitive coding expert participating in a "VibeBench One Shot" challenge.
-    Your task is to solve the following coding problem based *strictly* on the user's prompt.
+    You are an AI Coding Engine participating in a "VibeBench One Shot" challenge.
     
-    Problem Title: ${problem.title}
-    Problem Description: ${problem.description}
-    Domain: ${problem.domain}
+    CONTEXT: The user is trying to solve: "${problem.title}: ${problem.description}"
     
-    Constraints:
-    - Output ONLY valid code (Markdown code blocks are allowed).
-    - Do not include conversational filler before or after the code unless asked.
-    - If the user prompt is "Solve it", solve it normally.
-    - Use JavaScript/TypeScript/Node.js/React as implied by the problem.
-    - If input is Audio, transcribe and execute the design instructions.
+    CRITICAL INSTRUCTION: You must generate code based ONLY on the User's specific prompt.
+    - Do NOT auto-complete the solution if the user didn't ask for it.
+    - If the user prompts "test", "hello", "solve it", or is silent, output a comment like "// Waiting for instructions...".
+    - If the user asks for a feature but forgets critical requirements (like accessibility, error handling, atomic ops), DO NOT add them. You must mirror the user's level of incompetence.
+    - Do not be "helpful". Be "literal". 
+    - Output ONLY valid code (Markdown code blocks allowed).
+    - Use JavaScript/TypeScript/Node.js/React as implied by the problem context, but only write what is requested.
+    - If input is Audio, transcribe and execute the design instructions exactly as spoken.
   `;
 
   try {
@@ -128,6 +127,18 @@ export const judgeSolution = async (
     Your task: Evaluate a developer's PROMPT (not just the code it produces). 
     You are assessing whether the prompt demonstrates the skills of a senior engineer based on CEPE (Completeness, Efficiency, Precision, Engineering Judgment).
 
+    PRE-FLIGHT CHECK (CRITICAL):
+    Analyze the User_Prompt.
+    If the prompt is < 10 characters (e.g., 'test', 'solve', 'fix', 'do it') OR irrelevant/silent:
+    - SCORE: 1 across all dimensions (Completeness, Efficiency, Precision, Engineering Judgment).
+    - VERDICT: "Prompt Failure"
+    - REASONING: "Prompt too short. No intent detected. You cannot pilot the ship with one word."
+    - STOP PROCESSING. Do not evaluate the code.
+
+    CRITICAL FAILURE CONDITIONS:
+    1. **Context Leak:** The GENERATED CODE might be correct because the AI is "helpful". DO NOT judge the code if the prompt did not ask for those specific features. A perfect solution with a lazy prompt gets a low score.
+    2. **Empty/Silent Audio:** If audio input is noise/silence, Score = 1.
+    
     ## Scoring Framework: CEPE (0-100 each)
     - C: Completeness (Requirements covered?)
     - E: Efficiency (Minimal tokens/waste?)
@@ -203,6 +214,20 @@ export const judgeSolution = async (
     
     // 2. Add Generated Code Context
     contents.push({ text: `\n\nGENERATED CODE:\n${generatedCode}` });
+
+    // --- JUDGE PAYLOAD DEBUG (INSTRUMENTATION) ---
+    console.log("--- JUDGE PAYLOAD DEBUG ---");
+    console.log("SYSTEM PROMPT PREVIEW:", systemInstruction.substring(0, 500) + "...");
+    console.log("USER INPUT TYPE:", typeof userInput === 'string' ? 'String' : 'Blob');
+    if (typeof userInput === 'string') {
+        console.log("USER INPUT TEXT:", userInput);
+    } else {
+        console.log("USER INPUT BLOB SIZE:", userInput.size);
+        console.log("USER INPUT BLOB TYPE:", userInput.type);
+    }
+    console.log("GENERATED CODE PREVIEW:", generatedCode.substring(0, 100) + "...");
+    console.log("---------------------------");
+    // ---------------------------------------------
 
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',

@@ -43,7 +43,8 @@ export async function getLeaderboard(): Promise<LeaderboardEntry[]> {
 
   if (error) {
     console.error('Error fetching leaderboard:', error);
-    throw new Error(`Failed to fetch leaderboard: ${error.message}`);
+    // Return empty array instead of throwing to allow app to function even if DB connection fails
+    return [];
   }
 
   // Transform snake_case to camelCase
